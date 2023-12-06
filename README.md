@@ -7,11 +7,21 @@ Requires [BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 ## Usage
 
 ```tsx
-import { merge, exclude, contains } from 'fast-cidr-tools';
+import {
+  ip2bigint, // support both IPv4 and IPv6
+  bigint2ip, // support both IPv4 and IPv6
+  contains,
+  exclude,
+  expand,
+  merge,
+  overlap
+} from 'fast-cidr-tools';
 
-merge(['1.0.0.0/24'], ['1.0.1.0/24']); //=> ['1.0.0.0/23']
-exclude(['::1/127'], ['::1/128']) //=> ['::/128']
 contains(['1.0.0.0/24', '2.0.0.0/24'], ['1.0.0.1']) //=> true
+exclude(['::1/127'], ['::1/128']) //=> ['::/128']
+expand(['2001:db8::/126']) //=> ['2001:db8::', '2001:db8::1', '2001:db8::2', '2001:db8::3']
+merge(['1.0.0.0/24'], ['1.0.1.0/24']); //=> ['1.0.0.0/23']
+overlap(['1.0.0.0/24'], ['1.0.0.128/25']) //=> true
 ```
 
 ## Performance
@@ -23,7 +33,7 @@ contains(['1.0.0.0/24', '2.0.0.0/24'], ['1.0.0.1']) //=> true
   - `cidr-tools` sort the return value of `merge` and `exclude` by default. `fast-cidr-tools`'s sort is opt-in.
   - And many more.
 - Avoid unnecessary string operations.
-  - how `cidr-tools` and `fast-cidr-tools` calculate "biggest power of two":
+  - how `cidr-tools` and `fast-cidr-tools` calculate 'biggest power of two':
     ```tsx
     // cidr-tools
     function biggestPowerOfTwo(num) {
@@ -74,10 +84,10 @@ contains(['1.0.0.0/24', '2.0.0.0/24'], ['1.0.0.1']) //=> true
 - Use a more compact internal data structure. Compare how `cidr-tools` and `fast-cidr-tools` represent a CIDR internally:
   ```tsx
   // cidr-tools
-  parse("::/64"); //=> { cidr: "::/64", version: 6, prefix: "64", start: 0n, end: 18446744073709551615n }
+  parse('::/64'); //=> { cidr: '::/64', version: 6, prefix: '64', start: 0n, end: 18446744073709551615n }
 
   // fast-cidr-tools
-  parse("::/64"); //=> [0n, 18446744073709551615n, 6]
+  parse('::/64'); //=> [0n, 18446744073709551615n, 6]
   ```
 - Avoid repeated calculations. Notice how `fast-cidr-tools` pre-parse inputs instead of parsing them repeatedly:
   - [cidr-tools](https://github.com/silverwind/cidr-tools/blob/db0a5a0a69299592ad11109be476fcb9ed1796ab/index.js#L377-L380)
