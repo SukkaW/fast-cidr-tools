@@ -1,6 +1,6 @@
 {
   "name": "fast-cidr-tools",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "20x faster cidr-tools, IPv4 only",
   "homepage": "https://github.com/SukkaW/fast-cidr-tools-v4#readme",
   "repository": {
