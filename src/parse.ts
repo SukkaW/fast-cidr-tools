@@ -1,6 +1,6 @@
-import { bits, long } from './constants';
-import { ip2bigint } from './ip_int';
-import { fastIpVersion } from './version';
+import { bits, long } from './lib/constants';
+import { ip2bigint } from './lib/ip_int';
+import { fastIpVersion } from './lib/version';
 
 export type IpMeta = [start: bigint, end: bigint, version: 4 | 6];
 
