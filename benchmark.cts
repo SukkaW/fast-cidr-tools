@@ -9,7 +9,6 @@
     import('cidr-tools'),
     import('cidr-tools-wasm'),
     // @ts-expect-error -- no types
-    // eslint-disable-next-line import/no-unresolved -- build
     import('./dist/index.mjs')
   ]);
 
@@ -50,7 +49,7 @@
       ]);
     }),
 
-    b.add('fast-cidr-tools-v4', () => {
+    b.add('fast-cidr-tools', () => {
       fastExclude(['0.0.0.0/0'], [
         '0.0.0.0/8',
         '224.0.0.0/4',

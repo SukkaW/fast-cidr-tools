@@ -2,13 +2,13 @@
   "name": "fast-cidr-tools",
   "version": "0.1.1",
   "description": "20x faster cidr-tools, IPv4 only",
-  "homepage": "https://github.com/SukkaW/fast-cidr-tools-v4#readme",
+  "homepage": "https://github.com/SukkaW/fast-cidr-tools#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SukkaW/fast-cidr-tools-v4.git"
+    "url": "git+https://github.com/SukkaW/fast-cidr-tools.git"
   },
   "bugs": {
-    "url": "https://github.com/SukkaW/fast-cidr-tools-v4/issues"
+    "url": "https://github.com/SukkaW/fast-cidr-tools/issues"
   },
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",

@@ -1,17 +1,18 @@
 import { expect } from 'chai';
-import { merge, exclude } from '../src';
+import { merge, exclude, parse, ip2bigint, bigint2ip } from '../src';
 // import { merge, exclude } from '../build/debug.js';
 
 describe('cidr-tools-wasm', () => {
-  // it('exports', () => {
-  //   expect(m.merge).to.eql(merge);
-  //   expect(m.exclude).to.eql(exclude);
-  //   expect(m.expand).to.eql(expand);
-  //   expect(m.overlap).to.eql(overlap);
-  //   expect(m.contains).to.eql(contains);
-  //   expect(m.normalize).to.eql(normalize);
-  //   expect(m.parse).to.eql(parse);
-  // });
+  it('ip2bigint, bigint2ip', () => {
+    expect(bigint2ip(ip2bigint('6620:0:1ff2::', 6), 6)).to.eql('6620:0:1ff2::');
+  });
+
+  it('parse', () => {
+    const obj = parse('::/64');
+    expect(obj[2]).to.eql(6);
+    expect(obj[0]).to.eql(0n);
+    expect(obj[1]).to.eql(18_446_744_073_709_551_615n);
+  });
 
   it('merge', () => {
     expect(merge(['1.0.0.0', '1.0.0.1'])).to.eql(['1.0.0.0/31']);
@@ -24,6 +25,13 @@ describe('cidr-tools-wasm', () => {
     expect(merge(['0.0.1.0/24', '0.0.2.0/24', '0.0.3.0/24', '0.0.4.0/24'])).to.eql(['0.0.2.0/23', '0.0.1.0/24', '0.0.4.0/24']);
     expect(merge(['0.0.175.0/24', '0.0.176.0/21', '0.0.184.0/21', '0.0.192.0/24'])).to.eql(['0.0.176.0/20', '0.0.175.0/24', '0.0.192.0/24']);
     expect(merge(['0.0.176.0/21', '0.0.184.0/21', '0.0.192.0/24'])).to.eql(['0.0.176.0/20', '0.0.192.0/24']);
+
+    expect(merge(['::0/128', '::1/128'])).to.eql(['::/127']);
+    expect(merge(['::0', '::1'])).to.eql(['::/127']);
+    expect(merge(['6620:0:1ff2::/70'])).to.eql(['6620:0:1ff2::/70']);
+    expect(merge(['1:1:1:1::/128', '1:1:1:2::/128'])).to.eql(['1:1:1:1::/128', '1:1:1:2::/128']);
+    expect(merge(['::2:0:0/128', '::1:0:0/128'])).to.eql(['::1:0:0/128', '::2:0:0/128']);
+    expect(merge(['::2:0:0/128', '::1:0:0/128', '::2:0:1/128'])).to.eql(['::1:0:0/128', '::2:0:0/127']);
   });
 
   it('exclude', () => {
