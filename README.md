@@ -35,9 +35,11 @@ contains(['1.0.0.0/24', '2.0.0.0/24'], ['1.0.0.1']) //=> true
     const uint32 = new Uint32Array(uint64.buffer);
     function clz64(bigint: bigint) {
       uint64[0] = bigint;
-      const x = Math.clz32(uint32[1]);
-      const y = Math.clz32(uint32[0]);
-      return x + (x === 32 ? y : 0);
+      let r = Math.clz32(uint32[1]);
+      if (r === 32) {
+        r += Math.clz32(uint32[0]);
+      }
+      return r;
     }
 
     function biggestPowerOfTwo(num: bigint) {
