@@ -17,7 +17,9 @@ const uint64 = new BigUint64Array(1);
 const uint32 = new Uint32Array(uint64.buffer);
 export function clz64(bigint: bigint) {
   uint64[0] = bigint;
-  const x = Math.clz32(uint32[1]);
-  const y = Math.clz32(uint32[0]);
-  return x + (x === 32 ? y : 0);
+  let r = Math.clz32(uint32[1]);
+  if (r === 32) {
+    r += Math.clz32(uint32[0]);
+  }
+  return r;
 }
