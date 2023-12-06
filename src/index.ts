@@ -1,44 +1,6 @@
+import { bits } from './constants';
 import { ip2bigint, bigint2ip } from './ip_int';
-import { fastIpVersion } from './version';
-
-type IpMeta = [start: bigint, end: bigint, version: 4 | 6];
-
-const bits = {
-  4: 32n,
-  6: 128n
-} as const;
-
-const long = {
-  4: 0xFF_FF_FF_FFn,
-  6: (2n ** 128n) - 1n
-} as const;
-
-export function parse(cidr: string): IpMeta {
-  const version = fastIpVersion(cidr);
-
-  if (version === 0) {
-    throw new TypeError('Invalid IP address');
-  }
-
-  const splitted = cidr.split('/');
-  const ip = splitted[0];
-
-  const versionedBits = bits[version];
-
-  const bitmask: bigint = splitted.length > 1 ? BigInt(splitted[1]) : versionedBits;
-  const mask_long: bigint = bitmask > 0
-    ? long[version] << (versionedBits - bitmask)
-    : 0n;
-
-  const net_long: bigint = ip2bigint(ip, version) & mask_long;
-  const size = 1n << (versionedBits - bitmask);
-
-  return [
-    net_long /** start */,
-    net_long + size - 1n /** end */,
-    version
-  ];
-}
+import { parse, type IpMeta } from './parse';
 
 function mapNets(nets: IpMeta[]) {
   const v4 = new Map<bigint, IpMeta>();
@@ -436,4 +398,4 @@ export function contains(a: string[], b: string[]) {
 
 export const ip_str_to_int = ip2bigint;
 export const int_to_ip_str = bigint2ip;
-export { ip2bigint, bigint2ip };
+export { ip2bigint, bigint2ip, parse, type IpMeta };
