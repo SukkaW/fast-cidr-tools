@@ -1,6 +1,7 @@
 import { bits } from './constants';
 import { ip2bigint, bigint2ip } from './ip_int';
 import { parse, type IpMeta } from './parse';
+import { clz64, fast_popcnt, popcnt } from './util';
 
 function mapNets(nets: IpMeta[]) {
   const v4 = new Map<bigint, IpMeta>();
@@ -35,15 +36,6 @@ function mapNets(nets: IpMeta[]) {
     4: v4,
     6: v6
   } as const;
-}
-
-const uint64 = new BigUint64Array(1);
-const uint32 = new Uint32Array(uint64.buffer);
-function clz64(bigint: bigint) {
-  uint64[0] = bigint;
-  const x = Math.clz32(uint32[1]);
-  const y = Math.clz32(uint32[0]);
-  return x + (x === 32 ? y : 0);
 }
 
 function subparts($start: bigint, $end: bigint, version: 4 | 6): IpMeta[] {
@@ -104,21 +96,6 @@ function subparts($start: bigint, $end: bigint, version: 4 | 6): IpMeta[] {
   }
 
   return parts;
-}
-
-function fast_popcnt(value: bigint) {
-  let v = Number(value);
-  v -= v >>> 1 & 0x55_55_55_55;
-  v = (v & 0x33_33_33_33) + (v >>> 2 & 0x33_33_33_33);
-  return BigInt((((v + (v >>> 4)) & 0x0F_0F_0F_0F) * 0x01_01_01_01) >>> 24);
-}
-
-function popcnt(v: bigint) {
-  let c = 0n;
-  for (; v; c++) {
-    v &= v - 1n; // clear the least significant bit set
-  }
-  return c;
 }
 
 function single_range_to_single_cidr(input: [start: bigint, end: bigint, version: 4 | 6]): string {
@@ -362,13 +339,18 @@ export function exclude(_basenets: string[], _exclnets: string[], sort = false):
 }
 
 export function contains(a: string[], b: string[]) {
-  const numExpected = b.length;
+  const b_len = b.length;
+
+  const bParsedMap = new Array<IpMeta>(b_len);
+  for (let i = 0; i < b_len; i++) {
+    bParsedMap[i] = parse(b[i]);
+  }
 
   let numFound = 0;
   for (const a1 of a) {
     const aParsed = parse(a1);
-    for (const b1 of b) {
-      const bParsed = parse(b1);
+    for (let j = 0; j < b_len; j++) {
+      const bParsed = bParsedMap[j];
 
       // version mismatch
       if (aParsed[2] !== bParsed[2]) {
@@ -393,7 +375,7 @@ export function contains(a: string[], b: string[]) {
     }
   }
 
-  return numFound === numExpected;
+  return numFound === b_len;
 }
 
 export const ip_str_to_int = ip2bigint;
