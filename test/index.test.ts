@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { merge, exclude, parse, ip2bigint, bigint2ip } from '../src';
+import { merge, exclude, parse, ip2bigint, bigint2ip, contains } from '../src';
 // import { merge, exclude } from '../build/debug.js';
 
 describe('cidr-tools-wasm', () => {
@@ -46,5 +46,72 @@ describe('cidr-tools-wasm', () => {
     expect(exclude(['::/120'], ['::1/112'])).to.eql([]);
     expect(exclude(['::0/127', '1.2.3.0/24'], ['::/128'])).to.eql(['1.2.3.0/24', '::1/128']);
     expect(exclude(['::0/127', '1.2.3.0/24'], ['::/0', '0.0.0.0/0'])).to.eql([]);
+  });
+
+  it('contains', () => {
+    expect(contains(['1.0.0.0'], ['1.0.0.0'])).to.eql(true);
+    expect(contains(['1.0.0.0'], ['1.0.0.1'])).to.eql(false);
+    expect(contains(['1.0.0.0'], ['1.0.0.1/24'])).to.eql(false);
+    expect(contains(['1.0.0.0/24'], ['1.0.0.1/24'])).to.eql(true);
+    expect(contains(['1.0.0.0/24'], ['1.0.0.1'])).to.eql(true);
+    expect(contains(['1.0.0.0/24'], ['1.0.0.1'])).to.eql(true);
+    expect(contains(['1.0.0.0/24'], ['1.0.1.1'])).to.eql(false);
+    expect(contains(['0.0.0.0/24'], ['::'])).to.eql(false);
+    expect(contains(['0.0.0.0/0'], ['::'])).to.eql(false);
+    expect(contains(['0.0.0.0/0'], ['::1'])).to.eql(false);
+    expect(contains(['0.0.0.0/0'], ['0.0.0.0/0'])).to.eql(true);
+    expect(contains(['::/64'], ['::'])).to.eql(true);
+    expect(contains(['::/64'], ['::/64'])).to.eql(true);
+    expect(contains(['::/64'], ['::/96'])).to.eql(true);
+    expect(contains(['::/96'], ['::/64'])).to.eql(false);
+    expect(contains(['::/128'], ['::1'])).to.eql(false);
+    expect(contains(['::/128'], ['::'])).to.eql(true);
+    expect(contains(['::/128'], ['::/128'])).to.eql(true);
+    expect(contains(['::/120'], ['::/128'])).to.eql(true);
+    expect(contains(['::/128'], ['0.0.0.0'])).to.eql(false);
+    expect(contains(['::/128'], ['0.0.0.1'])).to.eql(false);
+    expect(contains(['::/128'], ['::/128'])).to.eql(true);
+    expect(contains(['1.0.0.0/24'], ['1.0.0.1'])).to.eql(true);
+    expect(contains(['1.0.0.0/24'], ['1.0.0.1'])).to.eql(true);
+    expect(contains(['1.0.0.0/24'], ['1.0.0.1'])).to.eql(true);
+    expect(contains(['1.0.0.0/24', '2.0.0.0'], ['1.0.0.1'])).to.eql(true);
+    expect(contains(['1.0.0.0/24', '2.0.0.0'], ['3.0.0.1'])).to.eql(false);
+    expect(contains(['1.0.0.0/24', '::/0'], ['3.0.0.1'])).to.eql(false);
+    expect(contains(['1.0.0.0/24', '::/0', '3.0.0.0/24'], ['3.0.0.1'])).to.eql(true);
+    expect(contains(['1.0.0.0/24', '::/0', '3.0.0.0/24'], ['::1'])).to.eql(true);
+    expect(contains(['1.0.0.0/24', '::/0', '3.0.0.0/24'], ['::1'])).to.eql(true);
+    expect(contains(['1.0.0.0/24', '::/0', '3.0.0.0/24'], ['::1', '::2'])).to.eql(true);
+    expect(contains(['1.0.0.0/24', '::/128', '3.0.0.0/24'], ['::1'])).to.eql(false);
+    expect(contains(['1.0.0.0/24', '::/128', '3.0.0.0/24'], ['::1', '::2'])).to.eql(false);
+    expect(contains(['fe80::%int'], ['fe80::'])).to.eql(true);
+    expect(contains(['fe80::%int'], ['fe80::%int'])).to.eql(true);
+    expect(contains(['fe80::'], ['fe80::%int'])).to.eql(true);
+    expect(contains(['fe80::%int/64'], ['fe80::/64'])).to.eql(true);
+    expect(contains(['fe80::%int/64'], ['fe80::%int/64'])).to.eql(true);
+    expect(contains(['fe80::/64'], ['fe80::%int/64'])).to.eql(true);
+
+    const privates = [
+      '10.0.0.0/8',
+      '100.64.0.0/10',
+      '127.0.0.1/8',
+      '172.16.0.0/12',
+      '192.168.0.0/16',
+      '::1/128',
+      'fc00::/7',
+      'fe80::/64'
+    ];
+
+    expect(contains(privates, ['127.0.0.1'])).to.eql(true);
+    expect(contains(privates, ['127.255.255.255'])).to.eql(true);
+    expect(contains(privates, ['100.64.0.0/24'])).to.eql(true);
+    expect(contains(privates, ['::1'])).to.eql(true);
+    expect(contains(privates, ['::2'])).to.eql(false);
+    expect(contains(privates, ['fe80::1'])).to.eql(true);
+    expect(contains(privates, ['127.0.0.1', '::1'])).to.eql(true);
+    expect(contains(privates, ['127.0.0.1', '::1/64'])).to.eql(false);
+    expect(contains(privates, ['127.0.0.1', '::2'])).to.eql(false);
+    expect(contains(privates, ['128.0.0.0', '::1'])).to.eql(false);
+    expect(contains(privates, ['127.0.0.1', 'fc00::'])).to.eql(true);
+    expect(contains(privates, ['127.0.0.1', '192.168.255.255', 'fe80::2'])).to.eql(true);
   });
 });

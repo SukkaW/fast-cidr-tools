@@ -399,6 +399,41 @@ export function exclude(_basenets: string[], _exclnets: string[], sort = false):
   return results;
 }
 
+export function contains(a: string[], b: string[]) {
+  const numExpected = b.length;
+
+  let numFound = 0;
+  for (const a1 of a) {
+    const aParsed = parse(a1);
+    for (const b1 of b) {
+      const bParsed = parse(b1);
+
+      // version mismatch
+      if (aParsed[2] !== bParsed[2]) {
+        continue;
+      }
+
+      //  aaa
+      // bbbb
+      // (a starts after b)
+      if (bParsed[0] < aParsed[0]) {
+        continue; // not contained
+      }
+
+      // aaa
+      // bbbb
+      // (b starts after a)
+      if (bParsed[1] > aParsed[1]) {
+        continue; // not contained
+      }
+
+      numFound++;
+    }
+  }
+
+  return numFound === numExpected;
+}
+
 export const ip_str_to_int = ip2bigint;
 export const int_to_ip_str = bigint2ip;
 export { ip2bigint, bigint2ip };
