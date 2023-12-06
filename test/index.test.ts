@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { merge, exclude, parse, ip2bigint, bigint2ip, contains } from '../src';
+import { merge, exclude, parse, ip2bigint, bigint2ip, contains, expand, overlap } from '../src';
 // import { merge, exclude } from '../build/debug.js';
 
 describe('cidr-tools-wasm', () => {
@@ -46,6 +46,26 @@ describe('cidr-tools-wasm', () => {
     expect(exclude(['::/120'], ['::1/112'])).to.eql([]);
     expect(exclude(['::0/127', '1.2.3.0/24'], ['::/128'])).to.eql(['1.2.3.0/24', '::1/128']);
     expect(exclude(['::0/127', '1.2.3.0/24'], ['::/0', '0.0.0.0/0'])).to.eql([]);
+  });
+
+  it('expand', () => {
+    expect(expand(['1.2.3.0/31'])).to.eql(['1.2.3.0', '1.2.3.1']);
+    expect(expand(['1::/126'])).to.eql(['1::', '1::1', '1::2', '1::3']);
+    expect(expand(['2008:db1::/127'])).to.eql(['2008:db1::', '2008:db1::1']);
+    expect(expand(['2008:db1::/127'])).to.eql(['2008:db1::', '2008:db1::1']);
+  });
+
+  it('overlap', () => {
+    // expect(overlap(['1.0.0.0/24'], ['1.0.0.0/30'])).to.eql(true, '1');
+    // expect(overlap(['2::/8'], ['1::/8'])).to.eql(true, '2');
+    expect(overlap(['1.0.0.0/25'], ['1.0.0.128/25'])).to.eql(false, '3');
+    // expect(overlap(['0.0.0.0/0'], ['::0/0'])).to.eql(false, '4');
+    // expect(overlap(['2::/64'], ['1::/64'])).to.eql(false, '5');
+    // expect(overlap(['1.0.0.0/24'], ['1.0.0.0/30'])).to.eql(true, '6');
+    // expect(overlap(['1.0.0.0', '2.0.0.0'], ['0.0.0.0/6'])).to.eql(true, '7');
+    // expect(overlap(['::1'], ['0.0.0.1'])).to.eql(false, '8');
+    // expect(overlap(['fe80:1:0:0:0:0:0:0'], ['fe80::/10'])).to.eql(true, '9');
+    // expect(overlap(['::1'], ['0.0.0.1', '0.0.0.2'])).to.eql(false, '10');
   });
 
   it('contains', () => {
