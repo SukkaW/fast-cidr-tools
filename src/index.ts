@@ -16,19 +16,11 @@ function mapNets(nets: IpMeta[]) {
     const map = v === 4 ? v4 : v6;
 
     const _1: IpMeta = map.has(start) ? map.get(start)! : [0n, 0n, v];
-    if (_1[0]) {
-      _1[0] = _1[0] + 1n;
-    } else {
-      _1[0] = 1n;
-    }
+    _1[0] = _1[0] ? _1[0] + 1n : 1n;
     map.set(start, _1);
 
     const _2: IpMeta = map.has(end) ? map.get(end)! : [0n, 0n, v];
-    if (_2[1]) {
-      _2[1] = _2[1] + 1n;
-    } else {
-      _2[1] = 1n;
-    }
+    _2[1] = _2[1] ? _2[1] + 1n : 1n;
     map.set(end, _2);
   }
 
