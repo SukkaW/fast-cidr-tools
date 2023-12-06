@@ -18,9 +18,10 @@ contains(['1.0.0.0/24', '2.0.0.0/24'], ['1.0.0.1']) //=> true
 
 `fast-cidr-tools` is very fast, and is specfically optimized for IPv4. In some specific cases, it can be 20x faster than `cidr-tools`. `fast-cidr-tools` acheive this performance by:
 
-- Doing less things.
+- Doing less things, E.g.:
   - `cidr-tools` will cast input to an array if it is string (`cidrTools.merge('1.0.0.0/24', '1.0.1.0/24')`). `fast-cidr-tools` only supports array input.
   - `cidr-tools` sort the return value of `merge` and `exclude` by default. `fast-cidr-tools`'s sort is opt-in.
+  - And many more.
 - Avoid unnecessary string operations.
   - how `cidr-tools` and `fast-cidr-tools` calculate "biggest power of two":
     ```tsx
@@ -78,3 +79,6 @@ contains(['1.0.0.0/24', '2.0.0.0/24'], ['1.0.0.1']) //=> true
   // fast-cidr-tools
   parse("::/64"); //=> [0n, 18446744073709551615n, 6]
   ```
+- Avoid repeated calculations. Notice how `fast-cidr-tools` pre-parse inputs instead of parsing them repeatedly:
+  - [cidr-tools](https://github.com/silverwind/cidr-tools/blob/db0a5a0a69299592ad11109be476fcb9ed1796ab/index.js#L377-L380)
+  - [fast-cidr-tools](https://github.com/SukkaW/fast-cidr-tools/blob/5a91cd521c3e4cbd832e1d6a47d522a8233e24f2/src/index.ts#L339-L348)
