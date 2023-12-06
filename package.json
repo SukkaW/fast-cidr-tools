@@ -1,6 +1,6 @@
 {
-  "name": "fast-cidr-tools-v4",
-  "version": "0.0.1",
+  "name": "fast-cidr-tools",
+  "version": "0.1.0",
   "description": "20x faster cidr-tools, IPv4 only",
   "homepage": "https://github.com/SukkaW/fast-cidr-tools-v4#readme",
   "repository": {
@@ -12,6 +12,7 @@
   },
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -28,7 +29,8 @@
     "lint": "eslint --format=sukka .",
     "build": "rollup -c rollup.config.ts --configPlugin swc3",
     "test": "mocha --require @swc-node/register test/index.test.ts",
-    "benchmark": "node -r @swc-node/register benchmark.cts"
+    "benchmark": "node -r @swc-node/register benchmark.cts",
+    "prepublishOnly": "rimraf dist && npm run lint && npm run test && npm run build"
   },
   "keywords": [
     "cidr",
@@ -52,6 +54,7 @@
     "eslint-config-sukka": "^4.1.9",
     "eslint-formatter-sukka": "^4.1.9",
     "mocha": "^10.2.0",
+    "rimraf": "^5.0.5",
     "rollup": "^4.6.1",
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-swc3": "^0.11.0",

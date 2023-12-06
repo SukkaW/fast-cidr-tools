@@ -1,26 +1,6 @@
-/* eslint-disable @typescript-eslint/naming-convention -- migrate from assemblyscript */
-export function ip_str_to_int(ip: string): bigint {
-  let a = 24n;
-  let buf = '';
-  let result = 0n;
+import { ip2bigint, bigint2ip } from './ip_int';
 
-  for (let i = 0, len = ip.length; i < len; i++) {
-    const char = ip.charAt(i);
-    if (char === '.') {
-      result |= (BigInt(buf) << a);
-      a -= 8n;
-      buf = '';
-    } else {
-      buf += char;
-    }
-  }
-
-  result |= BigInt(buf);
-
-  return result;
-}
-
-export function int_to_ip_str(number: bigint): string {
+export function int2ip(number: bigint): string {
   const part_0 = number >> 24n;
   const part_1 = number >> 16n & 0xFFn;
   const part_2 = number >> 8n & 0xFFn;
@@ -38,7 +18,7 @@ export function parse(cidr: string): [bigint, bigint] {
     ? 0xFF_FF_FF_FFn << (32n - bitmask)
     : 0n;
 
-  const net_long: bigint = ip_str_to_int(ip) & mask_long;
+  const net_long: bigint = ip2bigint(ip) & mask_long;
   const size = 1n << (32n - bitmask);
 
   return [
@@ -151,7 +131,7 @@ function popcnt(value: number) {
 }
 
 function single_range_to_single_cidr(start: bigint, end: bigint): string {
-  const ip = int_to_ip_str(start);
+  const ip = bigint2ip(start);
   const x = 32 - popcnt(Number(end - start));
   return `${ip}/${x}`;
 }
@@ -368,3 +348,7 @@ export function exclude(_basenets: string[], _exclnets: string[], sort = false):
   }
   return results;
 }
+
+export const ip_str_to_int = ip2bigint;
+export const int_to_ip_str = bigint2ip;
+export { ip2bigint, bigint2ip };
