@@ -81,7 +81,6 @@ function clz64(bigint: bigint) {
   uint64[0] = bigint;
   const x = Math.clz32(uint32[1]);
   const y = Math.clz32(uint32[0]);
-
   return x + (x === 32 ? y : 0);
 }
 
@@ -95,10 +94,11 @@ function subparts($start: bigint, $end: bigint, version: 4 | 6): IpMeta[] {
   }
 
   const size: bigint = $end + 1n - $start; /* diff($end, $start); */
+  const power = BigInt(64 - clz64(size) - 1);
 
   let biggest: bigint = size === 0n
     ? 0n
-    : 2n ** BigInt(64 - clz64(size) - 1);
+    : 2n ** (power === -1n ? 128n : power);
 
   if (size === biggest && $start + size === $end) {
     return [[$start, $end, version]];
