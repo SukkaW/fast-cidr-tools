@@ -33,15 +33,18 @@ overlap(['1.0.0.0/24'], ['1.0.0.128/25']) //=> true
   - `cidr-tools` sort the return value of `merge` and `exclude` by default. `fast-cidr-tools`'s sort is opt-in.
   - And many more.
 - Avoid unnecessary string operations.
-  - how `cidr-tools` and `fast-cidr-tools` calculate 'biggest power of two':
+  - how `cidr-tools` and `fast-cidr-tools` calculate the "biggest power of two":
     ```tsx
     // cidr-tools
     function biggestPowerOfTwo(num) {
       if (num === 0n) return 0n;
+      // Notice the slow toString(2) and re-cast length into BigInt
       return 2n ** BigInt(String(num.toString(2).length - 1));
     }
 
     // fast-cidr-tools
+    // Not the actual implementation: fast-cidr-tools actually inlines the calculation
+    // for better performance
     const uint64 = new BigUint64Array(1);
     const uint32 = new Uint32Array(uint64.buffer);
     function clz64(bigint: bigint) {
@@ -52,7 +55,6 @@ overlap(['1.0.0.0/24'], ['1.0.0.128/25']) //=> true
       }
       return r;
     }
-
     function biggestPowerOfTwo(num: bigint) {
       if (num === 0n) return 0n;
       const power = BigInt(64 - clz64(size) - 1);
@@ -66,20 +68,19 @@ overlap(['1.0.0.0/24'], ['1.0.0.128/25']) //=> true
     const prefix = bits[v] - (zeroes.match(/0/g) || []).length;
 
     // fast-cidr-tools
-    function fast_popcnt(value: bigint) {
+    function fast_popcnt(value: bigint | number) {
       let v = Number(value);
       v -= v >>> 1 & 0x55_55_55_55;
       v = (v & 0x33_33_33_33) + (v >>> 2 & 0x33_33_33_33);
       return BigInt((((v + (v >>> 4)) & 0x0F_0F_0F_0F) * 0x01_01_01_01) >>> 24);
     }
-    function popcnt(v: bigint) {
-      let c = 0n;
-      for (; v; c++) {
-        v &= v - 1n; // clear the least significant bit set
-      }
-      return c;
+    const uint64_0 = new BigUint64Array(1);
+    const uint32_0 = new Uint32Array(uint64_0.buffer);
+    function fast_popcnt64(value: bigint) {
+      uint64_0[0] = value;
+      return fast_popcnt(uint32_0[0]) + fast_popcnt(uint32_0[1]);
     }
-    const prefix = bits[v] - (v === 4 ? fast_popcnt(end - start) : popcnt(end - start));
+    const prefix = bits[v] - (v === 4 ? fast_popcnt(end - start) : fast_popcnt64(end - start));
     ```
 - Use a more compact internal data structure. Compare how `cidr-tools` and `fast-cidr-tools` represent a CIDR internally:
   ```tsx
