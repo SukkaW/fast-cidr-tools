@@ -9,7 +9,7 @@ export function ip2bigint(ip: string, version?: 4 | 6): bigint {
     let result = 0n;
 
     for (let i = 0, len = ip.length; i < len; i++) {
-      const char = ip.charAt(i);
+      const char = ip[i];
       if (char === '.') {
         result |= (BigInt(buf) << a);
         a -= 8n;

@@ -7,27 +7,30 @@ export function fast_popcnt32(value: bigint | number) {
   return BigInt((((v + (v >>> 4)) & 0x0F_0F_0F_0F) * 0x01_01_01_01) >>> 24);
 }
 
-const uint64_0 = new BigUint64Array(1);
-const uint32_0 = new Uint32Array(uint64_0.buffer);
+/**
+ * Prefer intarray over uintarray as prior is 2x faster. v8 internally represent uint as slow double.
+ */
+const int64_0 = new BigInt64Array(1);
+const int32_0 = new Int32Array(int64_0.buffer);
 export function fast_popcnt64(value: bigint) {
   /**
    * There are three methods to calculate popcnt of a 64-bit integer:
    *
-   * kbit popcnt64 impl: parallel, fast, but can overflow if input exceeds the range
-   * hamming non-parallel popcnt: slowest but the most accurate
-   * split into two 32bit: almost parallel, fastest as engine optimize Number a lot
+   * kbit popcnt64 impl: parallel, fast, but can overflow if input exceeds the predefined range
+   * hamming non-parallel popcnt: slowest but the most accurate, can only be optimized by precomputed mask lookup table
+   * split into two 32bit: almost parallel, fastest since engine optimize Number a lot
    */
-  uint64_0[0] = value;
-  return fast_popcnt32(uint32_0[0]) + fast_popcnt32(uint32_0[1]);
+  int64_0[0] = value;
+  return fast_popcnt32(int32_0[0]) + fast_popcnt32(int32_0[1]);
 }
 
-const uint64_1 = new BigUint64Array(1);
-const uint32_2 = new Uint32Array(uint64_1.buffer);
+const int64_1 = new BigInt64Array(1);
+const int32_2 = new Int32Array(int64_1.buffer);
 export function clz64(bigint: bigint) {
-  uint64_1[0] = bigint;
-  let r = Math.clz32(uint32_2[1]);
+  int64_1[0] = bigint;
+  let r = Math.clz32(int32_2[1]);
   if (r === 32) {
-    r += Math.clz32(uint32_2[0]);
+    r += Math.clz32(int32_2[0]);
   }
   return r;
 }
