@@ -56,16 +56,16 @@ describe('cidr-tools-wasm', () => {
   });
 
   it('overlap', () => {
-    // expect(overlap(['1.0.0.0/24'], ['1.0.0.0/30'])).to.eql(true, '1');
-    // expect(overlap(['2::/8'], ['1::/8'])).to.eql(true, '2');
+    expect(overlap(['1.0.0.0/24'], ['1.0.0.0/30'])).to.eql(true, '1');
+    expect(overlap(['2::/8'], ['1::/8'])).to.eql(true, '2');
     expect(overlap(['1.0.0.0/25'], ['1.0.0.128/25'])).to.eql(false, '3');
-    // expect(overlap(['0.0.0.0/0'], ['::0/0'])).to.eql(false, '4');
-    // expect(overlap(['2::/64'], ['1::/64'])).to.eql(false, '5');
-    // expect(overlap(['1.0.0.0/24'], ['1.0.0.0/30'])).to.eql(true, '6');
-    // expect(overlap(['1.0.0.0', '2.0.0.0'], ['0.0.0.0/6'])).to.eql(true, '7');
-    // expect(overlap(['::1'], ['0.0.0.1'])).to.eql(false, '8');
-    // expect(overlap(['fe80:1:0:0:0:0:0:0'], ['fe80::/10'])).to.eql(true, '9');
-    // expect(overlap(['::1'], ['0.0.0.1', '0.0.0.2'])).to.eql(false, '10');
+    expect(overlap(['0.0.0.0/0'], ['::0/0'])).to.eql(false, '4');
+    expect(overlap(['2::/64'], ['1::/64'])).to.eql(false, '5');
+    expect(overlap(['1.0.0.0/24'], ['1.0.0.0/30'])).to.eql(true, '6');
+    expect(overlap(['1.0.0.0', '2.0.0.0'], ['0.0.0.0/6'])).to.eql(true, '7');
+    expect(overlap(['::1'], ['0.0.0.1'])).to.eql(false, '8');
+    expect(overlap(['fe80:1:0:0:0:0:0:0'], ['fe80::/10'])).to.eql(true, '9');
+    expect(overlap(['::1'], ['0.0.0.1', '0.0.0.2'])).to.eql(false, '10');
   });
 
   it('contains', () => {
