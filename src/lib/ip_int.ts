@@ -101,14 +101,13 @@ export function bigint2ip(number: bigint, version: 4 | 6, compress = true): stri
 
 // take the longest or first sequence of "0" segments and replace it with "::"
 function compressIPv6(parts: string[]) {
-  let longest, current;
-  for (const [index, part] of parts.entries()) {
+  let longest: Set<number> | null = null;
+  let current: Set<number> | null = null;
+  for (let i = 0, len = parts.length; i < len; i++) {
+    const part = parts[i];
     if (part === '0') {
-      if (!current) {
-        current = new Set([index]);
-      } else {
-        current.add(index);
-      }
+      current ??= new Set();
+      current.add(i);
     } else if (current) {
       if (!longest || current.size > longest.size) {
         longest = current;
