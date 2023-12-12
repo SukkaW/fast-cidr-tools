@@ -26,19 +26,18 @@ overlap(['1.0.0.0/24'], ['1.0.0.128/25']) //=> true
 
 ## Performance
 
-`fast-cidr-tools` is very fast, and is specfically optimized for IPv4. In some specific cases, it can be 20x faster than `cidr-tools`. `fast-cidr-tools` acheive this performance by:
+`fast-cidr-tools` is very fast, and is specfically optimized for IPv4. In some cases, it can be 20x faster than `cidr-tools`. `fast-cidr-tools` acheive this performance by:
 
 - Doing less things, E.g.:
   - `cidr-tools` will cast input to an array if it is string (`cidrTools.merge('1.0.0.0/24', '1.0.1.0/24')`). `fast-cidr-tools` only supports array input.
   - `cidr-tools` sort the return value of `merge` and `exclude` by default. `fast-cidr-tools`'s sort is opt-in.
   - And many more.
-- Avoid unnecessary string operations.
+- Use efficient calculation and avoid unnecessary string operations.
   - how `cidr-tools` and `fast-cidr-tools` calculate the "biggest power of two":
     ```tsx
     // cidr-tools
     function biggestPowerOfTwo(num) {
       if (num === 0n) return 0n;
-      // Notice the slow toString(2) and re-cast length into BigInt
       return 2n ** BigInt(String(num.toString(2).length - 1));
     }
 
@@ -74,8 +73,8 @@ overlap(['1.0.0.0/24'], ['1.0.0.128/25']) //=> true
       v = (v & 0x33_33_33_33) + (v >>> 2 & 0x33_33_33_33);
       return BigInt((((v + (v >>> 4)) & 0x0F_0F_0F_0F) * 0x01_01_01_01) >>> 24);
     }
-    const uint64_0 = new BigUint64Array(1);
-    const uint32_0 = new Uint32Array(uint64_0.buffer);
+    const uint64_0 = new BigInt64Array(1);
+    const uint32_0 = new Int32Array(uint64_0.buffer);
     function fast_popcnt64(value: bigint) {
       uint64_0[0] = value;
       return fast_popcnt(uint32_0[0]) + fast_popcnt(uint32_0[1]);
