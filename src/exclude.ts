@@ -93,6 +93,12 @@ function excludeNets(a: IpMeta, b: IpMeta): IpMeta[] {
   return innerMerge(remaining);
 }
 
+const sorter = (a: IpMeta, b: IpMeta) => {
+  if (a[0] > b[0]) return 1;
+  if (a[0] < b[0]) return -1;
+  return 0;
+};
+
 export function exclude(_basenets: string[], _exclnets: string[], sort = false): string[] {
   const exclnets = _exclnets.length === 1
     ? [parse(_exclnets[0])]
@@ -113,7 +119,6 @@ export function exclude(_basenets: string[], _exclnets: string[], sort = false):
         for (let j = 0, len = remainders.length; j < len; j++) {
           basenets.push(remainders[j]);
         }
-
         basenets.splice(index, 1);
       }
 
@@ -122,18 +127,14 @@ export function exclude(_basenets: string[], _exclnets: string[], sort = false):
   }
 
   if (sort) {
-    basenets.sort((a: IpMeta, b: IpMeta) => {
-      if (a[0] > b[0]) return 1;
-      if (a[0] < b[0]) return -1;
-      return 0;
-    });
+    basenets.sort(sorter);
   }
 
   const result_len = basenets.length;
+  // This is consistently 2x faster than Array#map (under size of 20000, after that it is still faster, just not that much)
   const results = new Array<string>(result_len);
   for (let i = 0; i < result_len; i++) {
-    const net = basenets[i];
-    results[i] = single_range_to_single_cidr(net);
+    results[i] = single_range_to_single_cidr(basenets[i]);
   }
   return results;
 }

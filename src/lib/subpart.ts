@@ -20,10 +20,6 @@ export function subparts($start: bigint, $end: bigint, version: 4 | 6): IpMeta[]
       2n ** (power === -1n ? 128n : power)
     );
 
-  if (size === biggest && $start + size === $end) {
-    return [[$start, $end, version]];
-  }
-
   let start: bigint, end: bigint;
   if ($start % biggest === 0n) {
     // start is matching on the size-defined boundary - ex: 0-12, use 0-8
@@ -34,7 +30,7 @@ export function subparts($start: bigint, $end: bigint, version: 4 | 6): IpMeta[]
 
     // start is not matching on the size-defined boundary - 4-16, use 8-16
     if ((start + biggest - 1n) > $end) {
-      // divide will floor to nearest integer
+      // bigint when divide will floor to nearest integer
       start = (($end / biggest) - 1n) * biggest;
 
       while (start < $start) {

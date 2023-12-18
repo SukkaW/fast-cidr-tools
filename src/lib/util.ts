@@ -4,7 +4,7 @@ export function fast_popcnt32(value: bigint | number) {
   let v = Number(value);
   v -= v >>> 1 & 0x55_55_55_55;
   v = (v & 0x33_33_33_33) + (v >>> 2 & 0x33_33_33_33);
-  return BigInt((((v + (v >>> 4)) & 0x0F_0F_0F_0F) * 0x01_01_01_01) >>> 24);
+  return (((v + (v >>> 4)) & 0x0F_0F_0F_0F) * 0x01_01_01_01) >>> 24;
 }
 
 /**
@@ -21,7 +21,11 @@ export function fast_popcnt64(value: bigint) {
    * split into two 32bit: almost parallel, fastest since engine optimize Number a lot
    */
   int64_0[0] = value;
-  return fast_popcnt32(int32_0[0]) + fast_popcnt32(int32_0[1]);
+  let r = fast_popcnt32(int32_0[0]);
+  if (r === 32) {
+    r += fast_popcnt32(int32_0[1]);
+  }
+  return r;
 }
 
 const int64_1 = new BigInt64Array(1);

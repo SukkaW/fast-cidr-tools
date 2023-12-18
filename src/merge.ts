@@ -31,6 +31,12 @@ function mapNets(nets: IpMeta[]) {
   } as const;
 }
 
+const sorter = (a: bigint, b: bigint) => {
+  if (a > b) return 1;
+  if (a < b) return -1;
+  return 0;
+};
+
 export function innerMerge(nets: IpMeta[]): IpMeta[] {
   const merged = {
     4: [] as IpMeta[],
@@ -49,13 +55,7 @@ export function innerMerge(nets: IpMeta[]): IpMeta[] {
   };
 
   for (const v of ([4, 6] as const)) {
-    const numbers: bigint[] = (
-      Array.from(maps[v].keys()).sort((a: bigint, b: bigint) => {
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-      })
-    );
+    const numbers: bigint[] = Array.from(maps[v].keys()).sort(sorter);
 
     let depth = 0n;
 
@@ -96,7 +96,12 @@ export function innerMerge(nets: IpMeta[]): IpMeta[] {
     }
   }
 
-  return [...merged[4], ...merged[6]];
+  const merged_4 = merged[4];
+  const merged_6 = merged[6];
+
+  if (merged_4.length === 0) return merged_6;
+  if (merged_6.length === 0) return merged_4;
+  return merged[4].concat(merged[6]);
 }
 
 export function mergeToTuples(cidrs: string[]): IpMeta[] {
