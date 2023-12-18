@@ -1,21 +1,19 @@
 (async () => {
   const [
-    b,
+    { run, bench, group },
     { exclude: jsExclude },
     { exclude: wasmExclude },
     { exclude: fastExclude }
   ] = await Promise.all([
-    import('benny'),
+    import('mitata'),
     import('cidr-tools'),
     import('cidr-tools-wasm'),
     // @ts-expect-error -- no types
     import('./dist/index.mjs')
   ]);
 
-  b.suite(
-    'cidr-tools exclude',
-
-    b.add('cidr-tools', () => {
+  group('cidr-tools#exclude', () => {
+    bench('cidr-tools', () => {
       jsExclude(['0.0.0.0/0'], [
         '0.0.0.0/8',
         '224.0.0.0/4',
@@ -30,9 +28,9 @@
         '192.0.0.0/24',
         '192.0.2.0/24'
       ]);
-    }),
+    });
 
-    b.add('cidr-tools-wasm', () => {
+    bench('cidr-tools-wasm', () => {
       wasmExclude(['0.0.0.0/0'], [
         '0.0.0.0/8',
         '224.0.0.0/4',
@@ -47,9 +45,9 @@
         '192.0.0.0/24',
         '192.0.2.0/24'
       ]);
-    }),
+    });
 
-    b.add('fast-cidr-tools', () => {
+    bench('fast-cidr-tools', () => {
       fastExclude(['0.0.0.0/0'], [
         '0.0.0.0/8',
         '224.0.0.0/4',
@@ -64,9 +62,15 @@
         '192.0.0.0/24',
         '192.0.2.0/24'
       ]);
-    }),
+    });
+  });
 
-    b.cycle(),
-    b.complete()
-  );
+  await run({
+    avg: true,
+    json: false,
+    colors: true,
+    min_max: true,
+    collect: false,
+    percentiles: true
+  });
 })();
