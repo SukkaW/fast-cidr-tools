@@ -8,13 +8,18 @@ function mapNets(nets: IpMeta[]) {
   const v4 = new Map<bigint, IpMeta>();
   const v6 = new Map<bigint, IpMeta>();
 
+  const maps = {
+    4: v4,
+    6: v6
+  } as const;
+
   for (let i = 0, len = nets.length; i < len; i++) {
     const net = nets[i];
     const start: bigint = net[0];
     const end: bigint = net[1];
     const v = net[2];
 
-    const map = v === 4 ? v4 : v6;
+    const map = maps[v];
 
     const _1: IpMeta = map.has(start) ? map.get(start)! : [0n, 0n, v];
     _1[0] = _1[0] ? _1[0] + 1n : 1n;
@@ -25,10 +30,7 @@ function mapNets(nets: IpMeta[]) {
     map.set(end, _2);
   }
 
-  return {
-    4: v4,
-    6: v6
-  } as const;
+  return maps;
 }
 
 const sorter = (a: bigint, b: bigint) => {
