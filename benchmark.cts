@@ -1,7 +1,7 @@
 (async () => {
   const [
     { run, bench, group },
-    { exclude: jsExclude },
+    { excludeCidr: jsExclude },
     { exclude: wasmExclude },
     { exclude: fastExclude }
   ] = await Promise.all([
