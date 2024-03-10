@@ -45,16 +45,32 @@ export function subparts($start: bigint, $end: bigint, version: 4 | 6): IpMeta[]
     }
   }
 
-  let parts: IpMeta[] = [[start, end, version]];
+  const parts: IpMeta[] = [[start, end, version]];
+
+  let subparted: IpMeta[] = [];
+
+  let cached_parts_length = 0;
 
   // additional subnets on left side
   if (start !== $start) {
-    parts = parts.concat(subparts($start, start - 1n, version));
+    subparted = subparts($start, start - 1n, version);
+    cached_parts_length = parts.length;
+    parts.length = cached_parts_length + subparted.length;
+
+    for (let i = 0, len = subparted.length; i < len; i++) {
+      parts[cached_parts_length + i] = subparted[i];
+    }
   }
 
   // additional subnets on right side
   if (end !== $end) {
-    parts = parts.concat(subparts(end + 1n, $end, version));
+    subparted = subparts(end + 1n, $end, version);
+    cached_parts_length = parts.length;
+    parts.length = cached_parts_length + subparted.length;
+
+    for (let i = 0, len = subparted.length; i < len; i++) {
+      parts[cached_parts_length + i] = subparted[i];
+    }
   }
 
   return parts;
