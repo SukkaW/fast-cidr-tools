@@ -92,3 +92,15 @@ overlap(['1.0.0.0/24'], ['1.0.0.128/25']) //=> true
 - Avoid repeated calculations. Notice how `fast-cidr-tools` pre-parse inputs instead of parsing them repeatedly:
   - [cidr-tools](https://github.com/silverwind/cidr-tools/blob/db0a5a0a69299592ad11109be476fcb9ed1796ab/index.js#L377-L380)
   - [fast-cidr-tools](https://github.com/SukkaW/fast-cidr-tools/blob/5a91cd521c3e4cbd832e1d6a47d522a8233e24f2/src/index.ts#L339-L348)
+
+----
+
+**fast-cidr-tools** © [Sukka](https://github.com/SukkaW), Authored and maintained by Sukka with help from contributors ([list](https://github.com/SukkaW/fas-cidr-tools/graphs/contributors)).
+
+> [Personal Website](https://skk.moe) · [Blog](https://blog.skk.moe) · GitHub [@SukkaW](https://github.com/SukkaW) · Telegram Channel [@SukkaChannel](https://t.me/SukkaChannel) · Twitter [@isukkaw](https://twitter.com/isukkaw) · Keybase [@sukka](https://keybase.io/sukka)
+
+<p align="center">
+  <a href="https://github.com/sponsors/SukkaW/">
+    <img src="https://sponsor.cdn.skk.moe/sponsors.svg"/>
+  </a>
+</p>
