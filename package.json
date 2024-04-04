@@ -43,8 +43,8 @@
     "@eslint-sukka/node": "^5.1.2",
     "@eslint-sukka/ts": "^5.1.2",
     "@swc-node/register": "^1.9.0",
-    "@swc/core": "^1.4.6",
-    "@types/chai": "^4.3.12",
+    "@swc/core": "^1.4.12",
+    "@types/chai": "^4.3.14",
     "@types/mocha": "^10.0.6",
     "chai": "^4.4.1",
     "cidr-tools": "^9.1.1",
@@ -53,12 +53,12 @@
     "eslint-config-sukka": "^5.1.2",
     "eslint-formatter-sukka": "^5.1.2",
     "mitata": "^0.1.11",
-    "mocha": "^10.3.0",
+    "mocha": "^10.4.0",
     "rimraf": "^5.0.5",
-    "rollup": "^4.12.1",
+    "rollup": "^4.14.0",
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-swc3": "^0.11.0",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.3"
   },
   "engines": {
     "node": ">=16"
