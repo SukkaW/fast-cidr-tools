@@ -117,8 +117,20 @@ export function mergeToTuples(cidrs: string[]): IpMeta[] {
   return innerMerge(toBeMapped);
 }
 
-export function merge(cidrs: string[]): string[] {
+export function merge(cidrs: string[], sort = false): string[] {
   const merged = mergeToTuples(cidrs);
+
+  if (sort) {
+    merged.sort((a, b) => {
+      const a0 = a[0];
+      const b0 = b[0];
+      // bigint
+      if (a0 > b0) return 1;
+      if (a0 < b0) return -1;
+      return 0;
+    });
+  }
+
   const merged_len = merged.length;
 
   const results = new Array<string>(merged_len);
