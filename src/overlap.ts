@@ -8,8 +8,10 @@ export function overlap(a: string[], b: string[]) {
     bParsedMap[i] = parse(b[i]);
   }
 
-  for (const a1 of a) {
+  for (let a_i = 0, a_len = a.length; a_i < a_len; a_i++) {
+    const a1 = a[a_i];
     const aParsed = parse(a1);
+
     for (let j = 0; j < b_len; j++) {
       const bParsed = bParsedMap[j];
 
@@ -20,11 +22,11 @@ export function overlap(a: string[], b: string[]) {
 
       //    aaa
       // bbb
-      if (aParsed[0] > bParsed[1]) return false; // a starts after b
+      if (aParsed[0] > bParsed[1]) continue; // a starts after b
 
       // aaa
       //    bbb
-      if (bParsed[0] > aParsed[1]) return false; // b starts after a
+      if (bParsed[0] > aParsed[1]) continue; // b starts after a
 
       return true;
     }

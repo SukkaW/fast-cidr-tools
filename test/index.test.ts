@@ -72,6 +72,7 @@ describe('cidr-tools-wasm', () => {
     expect(overlap(['::1'], ['0.0.0.1'])).to.eql(false, '8');
     expect(overlap(['fe80:1:0:0:0:0:0:0'], ['fe80::/10'])).to.eql(true, '9');
     expect(overlap(['::1'], ['0.0.0.1', '0.0.0.2'])).to.eql(false, '10');
+    expect(overlap(['10.119.0.0/16'], ['172.20.250.229/31', '10.119.10.6/24'])).to.eql(true, '10');
   });
 
   it('contains', () => {
