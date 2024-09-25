@@ -1,7 +1,8 @@
 import { single_range_to_single_cidr } from './lib/range2cidr';
 import { subparts } from './lib/subpart';
 import { innerMerge, mergeToTuples } from './merge';
-import { parse, type IpMeta } from './parse';
+import { parse } from './parse';
+import type { IpMeta } from './parse';
 
 // exclude b from a and return remainder cidrs
 function excludeNets(a: IpMeta, b: IpMeta): IpMeta[] {

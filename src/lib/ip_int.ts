@@ -37,7 +37,8 @@ export function ip2bigint(ip: string, version?: 4 | 6): bigint {
 
     if (ip.includes('%')) {
       // let scopeid;
-      [, ip/* , scopeid */] = /(.+)%(.+)/.exec(ip)!;
+      // eslint-disable-next-line regexp/no-unused-capturing-group, regexp/no-misleading-capturing-group -- used
+      ip = /(.+)%(.+)/.exec(ip)![1];
       // res.scopeid = scopeid;
     }
 

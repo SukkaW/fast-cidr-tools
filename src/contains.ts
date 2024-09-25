@@ -1,4 +1,5 @@
-import { parse, type IpMeta } from './parse';
+import { parse } from './parse';
+import type { IpMeta } from './parse';
 
 export function contains(a: string[], b: string[]) {
   const b_len = b.length;

@@ -1,4 +1,5 @@
-import { parse, type IpMeta } from './parse';
+import { parse } from './parse';
+import type { IpMeta } from './parse';
 
 export function overlap(a: string[], b: string[]) {
   const b_len = b.length;
