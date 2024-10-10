@@ -40,27 +40,27 @@
   "author": "Sukka <https://skk.moe>",
   "license": "MIT",
   "devDependencies": {
-    "@eslint-sukka/node": "^6.6.0",
+    "@eslint-sukka/node": "^6.7.0",
     "@swc-node/register": "^1.10.9",
-    "@swc/core": "^1.7.28",
+    "@swc/core": "^1.7.35",
     "@types/chai": "^4.3.20",
-    "@types/mocha": "^10.0.8",
+    "@types/mocha": "^10.0.9",
     "chai": "^4.5.0",
     "cidr-tools": "^11.0.2",
     "cidr-tools-wasm": "^0.0.14",
-    "eslint": "^9.11.1",
-    "eslint-config-sukka": "^6.6.0",
-    "eslint-formatter-sukka": "^6.6.0",
+    "eslint": "^9.12.0",
+    "eslint-config-sukka": "^6.7.0",
+    "eslint-formatter-sukka": "^6.7.0",
     "mitata": "^1.0.10",
     "mocha": "^10.7.3",
     "rimraf": "^6.0.1",
-    "rollup": "^4.22.5",
+    "rollup": "^4.24.0",
     "rollup-plugin-dts": "^6.1.1",
-    "rollup-plugin-swc3": "^0.11.2",
-    "typescript": "^5.6.2"
+    "rollup-plugin-swc3": "^0.12.1",
+    "typescript": "^5.6.3"
   },
   "engines": {
     "node": ">=16"
   },
-  "packageManager": "pnpm@9.12.1+sha512.e5a7e52a4183a02d5931057f7a0dbff9d5e9ce3161e33fa68ae392125b79282a8a8a470a51dfc8a0ed86221442eb2fb57019b0990ed24fab519bf0e1bc5ccfc4"
+  "packageManager": "pnpm@9.12.1"
 }
