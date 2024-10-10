@@ -94,11 +94,11 @@ function excludeNets(a: IpMeta, b: IpMeta): IpMeta[] {
   return innerMerge(remaining);
 }
 
-const sorter = (a: IpMeta, b: IpMeta) => {
+function sorter(a: IpMeta, b: IpMeta) {
   if (a[0] > b[0]) return 1;
   if (a[0] < b[0]) return -1;
   return 0;
-};
+}
 
 export function exclude(_basenets: string[], _exclnets: string[], sort = false): string[] {
   const exclnets = _exclnets.length === 1
