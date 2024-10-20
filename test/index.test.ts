@@ -140,5 +140,7 @@ describe('cidr-tools-wasm', () => {
     expect(contains(privates, ['128.0.0.0', '::1'])).to.eql(false);
     expect(contains(privates, ['127.0.0.1', 'fc00::'])).to.eql(true);
     expect(contains(privates, ['127.0.0.1', '192.168.255.255', 'fe80::2'])).to.eql(true);
+
+    expect(contains(['127.0.0.0/8', '223.252.196.0/24'], ['223.252.196.38'])).to.eql(true);
   });
 });
