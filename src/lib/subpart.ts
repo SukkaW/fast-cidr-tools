@@ -2,15 +2,12 @@ import type { IpMeta } from '../parse';
 import { clz64 } from './util';
 
 export function subparts($start: bigint, $end: bigint, version: 4 | 6): IpMeta[] {
-  // special case for when part is length 1
-  if (($end - $start) === 1n) {
-    if ($end % 2n === 0n) {
-      return [[$start, $start, version], [$end, $end, version]];
-    }
+  const size: bigint = $end + 1n - $start; /* diff($end, $start); */
+
+  // special case for when size is power of 2 and start is on the boundary
+  if ((size & (size - 1n)) === 0n && $start % size === 0n) {
     return [[$start, $end, version]];
   }
-
-  const size: bigint = $end + 1n - $start; /* diff($end, $start); */
 
   let power = 0n;
   let biggest: bigint = size === 0n
