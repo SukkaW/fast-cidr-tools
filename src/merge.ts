@@ -33,11 +33,11 @@ function mapNets(nets: IpMeta[]) {
   return maps;
 }
 
-const sorter = (a: bigint, b: bigint) => {
+function sorter(a: bigint, b: bigint) {
   if (a > b) return 1;
   if (a < b) return -1;
   return 0;
-};
+}
 
 export function innerMerge(nets: IpMeta[]): IpMeta[] {
   const merged = {

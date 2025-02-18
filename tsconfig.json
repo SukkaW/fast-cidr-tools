@@ -9,6 +9,6 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true
   },
-  "include": ["src/**/*", "test/**/*", "rollup.config.ts", "benchmark.cts"],
+  "include": ["src/**/*", "test/**/*", "benchmark.cts"],
   "exclude": ["test/fixtures/**/*"]
 }
