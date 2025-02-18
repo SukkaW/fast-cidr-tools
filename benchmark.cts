@@ -8,8 +8,7 @@
     import('mitata'),
     import('cidr-tools'),
     import('cidr-tools-wasm'),
-    // @ts-expect-error -- no types
-    import('./dist/index.mjs')
+    import('./dist/es/index.mjs')
   ]);
 
   group('cidr-tools#exclude', () => {
