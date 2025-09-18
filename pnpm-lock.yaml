@@ -12,6 +12,10 @@ overrides:
 importers:
 
   .:
+    dependencies:
+      foxts:
+        specifier: ^3.13.0
+        version: 3.13.0
     devDependencies:
       '@eslint-sukka/node':
         specifier: ^7.1.1

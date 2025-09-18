@@ -1,4 +1,4 @@
-import { fastIpVersion } from './version';
+import { fastIpVersion } from 'foxts/fast-ip-version';
 
 export function ip2bigint(ip: string, version?: 4 | 6): bigint {
   const $version = version ?? fastIpVersion(ip);
