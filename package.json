@@ -1,6 +1,6 @@
 {
   "name": "fast-cidr-tools",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "cidr-tools but up to 20x faster",
   "homepage": "https://github.com/SukkaW/fast-cidr-tools#readme",
   "repository": {
