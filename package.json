@@ -34,7 +34,9 @@
     "build": "bunchee --clean --target=es2021",
     "test": "mocha --require @swc-node/register test/index.test.ts",
     "benchmark": "node -r @swc-node/register benchmark.cts",
-    "prepublishOnly": "rimraf dist && npm run test && npm run build"
+    "prepublishOnly": "rimraf dist && npm run test && npm run build",
+    "prerelease": "pnpm run lint && pnpm run test && pnpm run build",
+    "release": "bumpp -r --all --commit \"release: %s\" --tag \"%s\""
   },
   "keywords": [
     "cidr",
@@ -51,6 +53,7 @@
     "@swc-node/register": "^1.11.1",
     "@swc/core": "^1.13.5",
     "@types/mocha": "^10.0.10",
+    "bumpp": "^10.2.3",
     "bunchee": "^6.6.0",
     "cidr-tools": "^11.0.3",
     "cidr-tools-wasm": "^0.0.14",
