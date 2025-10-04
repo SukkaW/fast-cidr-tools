@@ -39,6 +39,9 @@ describe('cidr-tools-wasm', () => {
     expect(merge(['0:0:0:0:0:100:0:0:1/128', '0:0:0:0:0:100:0:0:3/128'])).toStrictEqual(['::100:0:0:1/128', '::100:0:0:3/128']);
     expect(merge(['2001:2160:7:30e::f8/128', '2001:2160:7:30e::fe/128'])).toStrictEqual(['2001:2160:7:30e::f8/128', '2001:2160:7:30e::fe/128']);
     expect(merge(['0:0:0:1::/64'])).toStrictEqual(['0:0:0:1::/64']);
+
+    // Issue #6: Test merging adjacent /64 IPv6 CIDRs into /63
+    expect(merge(['0:0:0:1::/64', '0:0:0:2::/64', '0:0:0:3::/64'])).toStrictEqual(['0:0:0:2::/63', '0:0:0:1::/64']);
   });
 
   it('exclude', () => {

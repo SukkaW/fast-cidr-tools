@@ -28,6 +28,18 @@ export function fast_popcnt64(value: bigint) {
   return r;
 }
 
+/**
+ * Fast popcount for 128-bit BigInt values
+ * Required for IPv6 CIDR calculations where range size can exceed 64 bits
+ */
+export function fast_popcnt128(value: bigint): number {
+  // Split 128-bit value into two 64-bit parts
+  const low = value & 0xFFFFFFFFFFFFFFFFn;
+  const high = value >> 64n;
+
+  return fast_popcnt64(low) + fast_popcnt64(high);
+}
+
 const int64_1 = new BigInt64Array(1);
 const int32_2 = new Int32Array(int64_1.buffer);
 export function clz64(bigint: bigint) {
@@ -37,4 +49,22 @@ export function clz64(bigint: bigint) {
     r += Math.clz32(int32_2[0]);
   }
   return r;
+}
+
+/**
+ * Count leading zeros for 128-bit BigInt values
+ * Required for IPv6 calculations where values can exceed 64 bits
+ */
+export function clz128(bigint: bigint): number {
+  // Split 128-bit value into two 64-bit parts
+  const high = bigint >> 64n;
+  const low = bigint & 0xFFFFFFFFFFFFFFFFn;
+
+  // If high part has any bits set, count from there
+  if (high !== 0n) {
+    return clz64(high);
+  }
+
+  // Otherwise count from low part (add 64 for the high part's zeros)
+  return 64 + clz64(low);
 }
