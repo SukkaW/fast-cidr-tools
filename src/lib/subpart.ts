@@ -1,5 +1,5 @@
 import type { IpMeta } from '../parse';
-import { clz64 } from './util';
+import { clz64, clz128 } from './util';
 
 export function subparts($start: bigint, $end: bigint, version: 4 | 6): IpMeta[] {
   const size: bigint = $end + 1n - $start; /* diff($end, $start); */
@@ -10,12 +10,19 @@ export function subparts($start: bigint, $end: bigint, version: 4 | 6): IpMeta[]
   }
 
   let power = 0n;
-  let biggest: bigint = size === 0n
-    ? 0n
-    : (
-      power = BigInt(64 - clz64(size) - 1),
-      2n ** (power === -1n ? 128n : power)
-    );
+  let biggest: bigint;
+
+  if (size === 0n) {
+    biggest = 0n;
+  } else if (version === 4) {
+    // IPv4: use 64-bit calculation
+    power = BigInt(64 - clz64(size) - 1);
+    biggest = 2n ** (power === -1n ? 128n : power);
+  } else {
+    // IPv6: use 128-bit calculation
+    power = BigInt(128 - clz128(size) - 1);
+    biggest = power < 0n ? 1n : 2n ** power;
+  }
 
   let start: bigint, end: bigint;
   if ($start % biggest === 0n) {

@@ -1,5 +1,5 @@
 import { bigint2ip } from './ip_int';
-import { fast_popcnt32, fast_popcnt64 } from './util';
+import { fast_popcnt32, fast_popcnt128 } from './util';
 
 const bit = {
   4: 32,
@@ -8,7 +8,7 @@ const bit = {
 
 const popcntFn = {
   4: fast_popcnt32,
-  6: fast_popcnt64
+  6: fast_popcnt128
 };
 
 export function single_range_to_single_cidr(input: [start: bigint, end: bigint, version: 4 | 6]): string {
