@@ -34,7 +34,7 @@ export function fast_popcnt64(value: bigint) {
  */
 export function fast_popcnt128(value: bigint): number {
   // Split 128-bit value into two 64-bit parts
-  const low = value & 0xFFFFFFFFFFFFFFFFn;
+  const low = value & 0xFF_FF_FF_FF_FF_FF_FF_FFn;
   const high = value >> 64n;
 
   return fast_popcnt64(low) + fast_popcnt64(high);
@@ -58,7 +58,7 @@ export function clz64(bigint: bigint) {
 export function clz128(bigint: bigint): number {
   // Split 128-bit value into two 64-bit parts
   const high = bigint >> 64n;
-  const low = bigint & 0xFFFFFFFFFFFFFFFFn;
+  const low = bigint & 0xFF_FF_FF_FF_FF_FF_FF_FFn;
 
   // If high part has any bits set, count from there
   if (high !== 0n) {
