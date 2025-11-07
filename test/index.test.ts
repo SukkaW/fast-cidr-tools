@@ -147,5 +147,13 @@ describe('cidr-tools-wasm', () => {
 
     expect(contains(['127.0.0.0/8', '223.252.196.0/24'], ['223.252.196.38'])).toBe(true);
     expect(contains(['127.0.0.0/8', '223.252.196.0/24'], ['223.252.196.38/32'])).toBe(true);
+
+    // Test cases for duplicate CIDR blocks
+    expect(contains(['192.168.1.0/24', '192.168.1.0/24'], ['192.168.1.0'])).toBe(true);
+    expect(contains(['192.168.1.0/24', '192.168.1.0/24'], ['192.168.1.255'])).toBe(true);
+    expect(contains(['192.168.1.0/24', '192.168.1.0/24'], ['192.168.2.0'])).toBe(false);
+    expect(contains(['192.168.1.0/24', '192.168.1.0/24', '10.0.0.0/8'], ['192.168.1.5', '10.0.0.1'])).toBe(true);
+    expect(contains(['::/64', '::/64'], ['::1'])).toBe(true);
+    expect(contains(['::/64', '::/64'], ['::/128'])).toBe(true);
   });
 });

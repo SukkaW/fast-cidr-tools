@@ -9,10 +9,15 @@ export function contains(a: string[], b: string[]) {
     bParsedMap[i] = parse(b[i]);
   }
 
-  let numFound = 0;
+  const foundIndices = new Set<number>();
   for (const a1 of a) {
     const aParsed = parse(a1);
     for (let j = 0; j < b_len; j++) {
+      // Skip if this IP from b was already found
+      if (foundIndices.has(j)) {
+        continue;
+      }
+
       const bParsed = bParsedMap[j];
 
       // version mismatch
@@ -34,9 +39,9 @@ export function contains(a: string[], b: string[]) {
         continue; // not contained
       }
 
-      numFound++;
+      foundIndices.add(j);
     }
   }
 
-  return numFound === b_len;
+  return foundIndices.size === b_len;
 }
