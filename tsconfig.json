@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "target": "es2021",
-    "module": "commonjs",
+    "module": "preserve",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "declaration": true,
     "outDir": "./dist",
