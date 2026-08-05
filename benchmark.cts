@@ -65,11 +65,6 @@
   });
 
   await run({
-    avg: true,
-    json: false,
-    colors: true,
-    min_max: true,
-    collect: false,
-    percentiles: true
+    colors: true
   });
 })();
