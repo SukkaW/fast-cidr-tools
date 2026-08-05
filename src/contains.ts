@@ -10,7 +10,8 @@ export function contains(a: string[], b: string[]) {
   }
 
   const foundIndices = new Set<number>();
-  for (const a1 of a) {
+  for (let i = 0, len = a.length; i < len; i++) {
+    const a1 = a[i];
     const aParsed = parse(a1);
     for (let j = 0; j < b_len; j++) {
       // Skip if this IP from b was already found

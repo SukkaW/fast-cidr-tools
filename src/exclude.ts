@@ -42,7 +42,9 @@ function excludeNets(a: IpMeta, b: IpMeta): IpMeta[] {
 
   const remaining: IpMeta[] = [];
   let subpart: IpMeta[];
+  // eslint-disable-next-line no-useless-assignment -- v8 type hint
   let j = 0;
+  // eslint-disable-next-line no-useless-assignment -- v8 type hint
   let len2 = 0;
 
   // aaaa

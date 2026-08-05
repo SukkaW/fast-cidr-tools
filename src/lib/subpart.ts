@@ -9,6 +9,7 @@ export function subparts($start: bigint, $end: bigint, version: 4 | 6): IpMeta[]
     return [[$start, $end, version]];
   }
 
+  // eslint-disable-next-line no-useless-assignment -- v8 type hint
   let power = 0n;
   let biggest: bigint;
 
@@ -24,11 +25,10 @@ export function subparts($start: bigint, $end: bigint, version: 4 | 6): IpMeta[]
     biggest = power < 0n ? 1n : 2n ** power;
   }
 
-  let start: bigint, end: bigint;
+  let start: bigint;
   if ($start % biggest === 0n) {
     // start is matching on the size-defined boundary - ex: 0-12, use 0-8
     start = $start;
-    end = start + biggest - 1n;
   } else {
     start = ($end / biggest) * biggest;
 
@@ -41,18 +41,16 @@ export function subparts($start: bigint, $end: bigint, version: 4 | 6): IpMeta[]
         biggest /= 2n;
         start = (($end / biggest) - 1n) * biggest;
       }
-
-      end = start + biggest - 1n;
     } else {
       start = ($end / biggest) * biggest;
-      end = start + biggest - 1n;
     }
   }
+  const end = start + biggest - 1n;
 
   const parts: IpMeta[] = [[start, end, version]];
 
-  let subparted: IpMeta[] = [];
-
+  let subparted: IpMeta[];
+  // eslint-disable-next-line no-useless-assignment -- v8 type hint
   let cached_parts_length = 0;
 
   // additional subnets on left side

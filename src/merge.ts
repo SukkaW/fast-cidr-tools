@@ -56,7 +56,9 @@ export function innerMerge(nets: IpMeta[]): IpMeta[] {
     6: -1n
   };
 
-  for (const v of ([4, 6] as const)) {
+  const versions = [4, 6] as const;
+  for (let vi = 0, versions_len = versions.length; vi < versions_len; vi++) {
+    const v = versions[vi];
     const numbers: bigint[] = Array.from(maps[v].keys()).sort(sorter);
 
     let depth = 0n;
@@ -68,7 +70,7 @@ export function innerMerge(nets: IpMeta[]): IpMeta[] {
       const marker_0: bigint = marker[0];
       const marker_1: bigint = marker[1];
 
-      if (start[v] === -1n && marker_0) {
+      if (marker_0 && start[v] === -1n) {
         start[v] = number;
       }
       if (marker_1) {

@@ -1,5 +1,9 @@
 import { fastIpVersion } from 'foxts/fast-ip-version';
 
+// eslint-disable-next-line regexp/no-unused-capturing-group, regexp/no-misleading-capturing-group -- used
+const RE_SCOPEID = /(.+)%(.+)/;
+const RE_CONSECUTIVE_COLONS = /:{2,}/;
+
 export function ip2bigint(ip: string, version?: 4 | 6): bigint {
   const $version = version ?? fastIpVersion(ip);
 
@@ -37,8 +41,7 @@ export function ip2bigint(ip: string, version?: 4 | 6): bigint {
 
     if (ip.includes('%')) {
       // let scopeid;
-      // eslint-disable-next-line regexp/no-unused-capturing-group, regexp/no-misleading-capturing-group -- used
-      ip = /(.+)%(.+)/.exec(ip)![1];
+      ip = RE_SCOPEID.exec(ip)![1];
       // res.scopeid = scopeid;
     }
 
@@ -55,7 +58,8 @@ export function ip2bigint(ip: string, version?: 4 | 6): bigint {
     let exp = 0n;
 
     const r = parts.map(part => (part === '' ? 0n : BigInt(Number.parseInt(part, 16)))).reverse();
-    for (const n of r) {
+    for (let i = 0, len = r.length; i < len; i++) {
+      const n = r[i];
       number += n * (2n ** exp);
       exp += 16n;
     }
@@ -124,5 +128,5 @@ function compressIPv6(parts: string[]) {
     parts[index] = ':';
   }
 
-  return parts.filter(Boolean).join(':').replace(/:{2,}/, '::');
+  return parts.filter(Boolean).join(':').replace(RE_CONSECUTIVE_COLONS, '::');
 }
