@@ -1,0 +1,6 @@
+allowBuilds:
+  '@swc/core': true
+  unrs-resolver: true
+overrides:
+  is-core-module: npm:@nolyfill/is-core-module@^1.0.39
+  safe-buffer: npm:@nolyfill/safe-buffer@^1.0.44
