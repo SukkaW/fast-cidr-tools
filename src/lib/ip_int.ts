@@ -124,8 +124,10 @@ function compressIPv6(parts: string[]) {
     longest = current;
   }
 
-  for (const index of longest || []) {
-    parts[index] = ':';
+  if (longest) {
+    for (const index of longest) {
+      parts[index] = ':';
+    }
   }
 
   return parts.filter(Boolean).join(':').replace(RE_CONSECUTIVE_COLONS, '::');

@@ -46,10 +46,10 @@
   "author": "Sukka <https://skk.moe>",
   "license": "MIT",
   "dependencies": {
-    "foxts": "^5.9.0"
+    "foxts": "^5.9.1"
   },
   "devDependencies": {
-    "@eslint-sukka/node": "^8.14.2",
+    "@eslint-sukka/node": "^9.0.1",
     "@swc-node/register": "^1.12.1",
     "@swc/core": "^1.15.47",
     "@types/mocha": "^10.0.10",
@@ -58,15 +58,15 @@
     "cidr-tools": "^12.1.3",
     "cidr-tools-wasm": "^0.0.14",
     "earl": "^2.0.0",
-    "eslint": "^10.8.0",
-    "eslint-config-sukka": "^8.14.2",
-    "eslint-formatter-sukka": "^8.14.2",
+    "eslint": "^10.8.1",
+    "eslint-config-sukka": "^9.0.1",
+    "eslint-formatter-sukka": "^9.0.1",
     "mitata": "^1.0.34",
     "mocha": "^11.8.0",
     "rimraf": "^6.1.3",
     "typescript": "^5.9.3"
   },
-  "packageManager": "pnpm@11.20.0",
+  "packageManager": "pnpm@11.21.0",
   "engines": {
     "node": ">=16"
   }
