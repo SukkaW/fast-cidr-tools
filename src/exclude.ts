@@ -118,13 +118,13 @@ export function exclude(_basenets: string[], _exclnets: string[], sort = false):
     while (index < basenets.length) {
       const base = basenets[index];
       const remainders = excludeNets(base, excl);
-      if (remainders.length !== 1 || remainders[0][0] !== base[0] || remainders[0][1] !== base[1]) {
+      if (remainders.length === 1 && remainders[0][0] === base[0] && remainders[0][1] === base[1]) {
+        index++;
+      } else {
         for (let j = 0, len = remainders.length; j < len; j++) {
           basenets.push(remainders[j]);
         }
         basenets.splice(index, 1);
-      } else {
-        index++;
       }
     }
   }
