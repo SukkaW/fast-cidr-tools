@@ -56,6 +56,11 @@ describe('cidr-tools-wasm', () => {
     expect(exclude(['::/120'], ['::1/112'])).toEqual([]);
     expect(exclude(['::0/127', '1.2.3.0/24'], ['::/128'])).toEqual(['1.2.3.0/24', '::1/128']);
     expect(exclude(['::0/127', '1.2.3.0/24'], ['::/0', '0.0.0.0/0'])).toEqual([]);
+
+    // Issue #9: one exclusion covering multiple base networks removes all of them
+    expect(exclude(['10.0.0.0/24', '10.0.2.0/24'], ['10.0.0.0/16'])).toEqual([]);
+    expect(exclude(['1.0.0.0/24', '2.0.0.0/24', '3.0.0.0/24'], ['0.0.0.0/0'])).toEqual([]);
+    expect(exclude(['2001:db8:1::/48', '2001:db8:3::/48'], ['2001:db8::/32'])).toEqual([]);
   });
 
   it('expand', () => {

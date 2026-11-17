@@ -123,9 +123,9 @@ export function exclude(_basenets: string[], _exclnets: string[], sort = false):
           basenets.push(remainders[j]);
         }
         basenets.splice(index, 1);
+      } else {
+        index++;
       }
-
-      index++;
     }
   }
 
